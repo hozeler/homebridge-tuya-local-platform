@@ -1,15 +1,21 @@
 import type { Characteristic as CharacteristicType, WithUUID } from 'homebridge'
 import type { EnergyCharacteristicsMap } from '../types'
 
-const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristicsMap => {
+const createEnergyCharacteristics = (Characteristic: any, hap?: any): EnergyCharacteristicsMap => {
+  // Homebridge 2.x / hap-nodejs 2.x moved Formats and Perms from Characteristic
+  // statics to module-level exports on the hap object. Resolve with fallbacks so
+  // the plugin keeps working on both 1.x and 2.x.
+  const Formats = Characteristic?.Formats ?? hap?.Formats ?? { FLOAT: 'float' }
+  const Perms = Characteristic?.Perms ?? hap?.Perms ?? { PAIRED_READ: 'pr', NOTIFY: 'ev' }
+
   class EnergyCharacteristic extends Characteristic {
     static readonly UUID: string = ''
 
     constructor(displayName: string, UUID: string) {
       super(displayName, UUID)
       this.setProps({
-        format: Characteristic.Formats.FLOAT,
-        perms: [Characteristic.Perms.PAIRED_READ, Characteristic.Perms.NOTIFY],
+        format: Formats.FLOAT,
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
       })
       this.value = this.getDefaultValue()
     }
@@ -21,9 +27,9 @@ const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristics
     constructor() {
       super('Amperes', Amperes.UUID)
       this.setProps({
-        format: Characteristic.Formats.FLOAT,
+        format: Formats.FLOAT,
         unit: 'A' as any,
-        perms: [Characteristic.Perms.PAIRED_READ, Characteristic.Perms.NOTIFY],
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minStep: 0.001,
       })
       this.value = this.getDefaultValue()
@@ -36,9 +42,9 @@ const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristics
     constructor() {
       super('Kilowatt Hours', KilowattHours.UUID)
       this.setProps({
-        format: Characteristic.Formats.FLOAT,
+        format: Formats.FLOAT,
         unit: 'kWh' as any,
-        perms: [Characteristic.Perms.PAIRED_READ, Characteristic.Perms.NOTIFY],
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minStep: 0.001,
       })
       this.value = this.getDefaultValue()
@@ -51,9 +57,9 @@ const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristics
     constructor() {
       super('Kilowatt Volt Ampere Hour', KilowattVoltAmpereHour.UUID)
       this.setProps({
-        format: Characteristic.Formats.FLOAT,
+        format: Formats.FLOAT,
         unit: 'kVAh' as any,
-        perms: [Characteristic.Perms.PAIRED_READ, Characteristic.Perms.NOTIFY],
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minStep: 0.001,
       })
       this.value = this.getDefaultValue()
@@ -66,9 +72,9 @@ const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristics
     constructor() {
       super('Volt Amperes', VoltAmperes.UUID)
       this.setProps({
-        format: Characteristic.Formats.FLOAT,
+        format: Formats.FLOAT,
         unit: 'VA' as any,
-        perms: [Characteristic.Perms.PAIRED_READ, Characteristic.Perms.NOTIFY],
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minStep: 0.001,
       })
       this.value = this.getDefaultValue()
@@ -81,9 +87,9 @@ const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristics
     constructor() {
       super('Volts', Volts.UUID)
       this.setProps({
-        format: Characteristic.Formats.FLOAT,
+        format: Formats.FLOAT,
         unit: 'V' as any,
-        perms: [Characteristic.Perms.PAIRED_READ, Characteristic.Perms.NOTIFY],
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minStep: 0.1,
       })
       this.value = this.getDefaultValue()
@@ -96,9 +102,9 @@ const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristics
     constructor() {
       super('Watts', Watts.UUID)
       this.setProps({
-        format: Characteristic.Formats.FLOAT,
+        format: Formats.FLOAT,
         unit: 'W' as any,
-        perms: [Characteristic.Perms.PAIRED_READ, Characteristic.Perms.NOTIFY],
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minStep: 0.1,
       })
       this.value = this.getDefaultValue()

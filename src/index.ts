@@ -89,7 +89,7 @@ class TuyaLocalPlatform {
     ;[this.log, this.config, this.api] = [...props]
 
     this.cachedAccessories = new Map()
-    this.api.hap.EnergyCharacteristics = EnergyCharacteristicsFactory(this.api.hap.Characteristic)
+    this.api.hap.EnergyCharacteristics = EnergyCharacteristicsFactory(this.api.hap.Characteristic, this.api.hap)
 
     if (!this.config || !this.config.devices) {
       this.log('No devices found. Check that you have specified them in your config.json file.')
@@ -245,6 +245,12 @@ class TuyaLocalPlatform {
   configureAccessory(accessory: any): void {
     if (accessory instanceof PlatformAccessory && this._expectedUUIDs && this._expectedUUIDs.includes(accessory.UUID)) {
       this.cachedAccessories.set(accessory.UUID, accessory)
+      // Homebridge 2.x / hap-nodejs 2.x renamed Perms.WRITE to Perms.PAIRED_WRITE
+      // (same "pw" value) and moved the enums off the Characteristic class, so
+      // resolve the perm values with fallbacks for both 1.x and 2.x.
+      const Perms = Characteristic?.Perms ?? this.api?.hap?.Perms ?? {}
+      const WRITE_PERM = Perms.WRITE ?? Perms.PAIRED_WRITE ?? 'pw'
+      const NOTIFY_PERM = Perms.NOTIFY ?? 'ev'
       accessory.services.forEach((service: any) => {
         if (service.UUID === Service.AccessoryInformation.UUID) return
         service.characteristics.some((characteristic: any) => {
@@ -252,10 +258,7 @@ class TuyaLocalPlatform {
             !characteristic.props ||
             !Array.isArray(characteristic.props.perms) ||
             characteristic.props.perms.length !== 3 ||
-            !(
-              characteristic.props.perms.includes(Characteristic.Perms.WRITE) &&
-              characteristic.props.perms.includes(Characteristic.Perms.NOTIFY)
-            )
+            !(characteristic.props.perms.includes(WRITE_PERM) && characteristic.props.perms.includes(NOTIFY_PERM))
           )
             return
 

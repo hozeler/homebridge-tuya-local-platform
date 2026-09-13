@@ -1,15 +1,15 @@
 {
   "name": "@nubisco/homebridge-tuya-local-platform",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Homebridge plugin to control Tuya devices locally over LAN",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nubisco/homebridge-tuya-local-platform.git"
+    "url": "git+https://github.com/hozeler/homebridge-tuya-local-platform.git"
   },
   "author": "José Silva <jose@nubisco.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nubisco/homebridge-tuya-local-platform/issues"
+    "url": "https://github.com/hozeler/homebridge-tuya-local-platform/issues"
   },
   "homepage": "https://github.com/nubisco/homebridge-tuya-local-platform#readme",
   "keywords": [

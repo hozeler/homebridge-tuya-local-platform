@@ -2,7 +2,7 @@
   "pluginAlias": "TuyaLocalPlatform",
   "pluginType": "platform",
   "singular": true,
-  "headerDisplay": "For setup instructions, device configuration, and troubleshooting, visit the [documentation](https://docs.nubisco.io/homebridge-tuya-local-platform/).",
+  "headerDisplay": "For setup instructions, device configuration, and troubleshooting, visit the [documentation](https://github.com/hozeler/homebridge-tuya-local-platform).",
   "footerDisplay": "",
   "schema": {
     "type": "object",

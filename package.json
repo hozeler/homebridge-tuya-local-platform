@@ -1,5 +1,5 @@
 {
-  "name": "@nubisco/homebridge-tuya-local-platform",
+  "name": "@hozeler/homebridge-tuya-local-platform",
   "version": "1.7.2",
   "description": "Homebridge plugin to control Tuya devices locally over LAN",
   "repository": {
@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/hozeler/homebridge-tuya-local-platform/issues"
   },
-  "homepage": "https://github.com/nubisco/homebridge-tuya-local-platform#readme",
+  "homepage": "https://github.com/hozeler/homebridge-tuya-local-platform#readme",
   "keywords": [
     "homebridge-plugin",
     "homebridge",
@@ -36,7 +36,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "prebuild": "npm run clean",
     "build": "tsc",
     "dev": "tsc --watch",
@@ -52,7 +52,7 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "prepare": "simple-git-hooks"
+    "prepare": "(simple-git-hooks || true) && npm run build"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged && npm run quality:check",
